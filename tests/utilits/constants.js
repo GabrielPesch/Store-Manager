@@ -3,6 +3,12 @@ const PRODUCTS_LIST = [
   { "id": 2, "name": "Traje de encolhimento" },
 ]
 
+const ADDED_PRODUCT = {
+  "id": 7,
+  "name": "ProdutoX"
+}
+
 module.exports = {
   PRODUCTS_LIST,
+  ADDED_PRODUCT,
 }
