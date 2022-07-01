@@ -10,7 +10,13 @@ const productsController = {
     await productsService.checkNotExists(id);
     const product = await productsService.get(id);
     return res.status(200).json(product);
-},
+  },
+  async add(req, res) {
+    const data = await productsService.validateBodyAdd(req.body);
+    const id = await productsService.add(data);
+    const product = await productsService.get(id);
+    return res.status(201).json(product);
+  },
 };
 
 module.exports = productsController;

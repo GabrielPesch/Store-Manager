@@ -14,15 +14,27 @@ const productsService = {
     return product;
   },
 
+  async add(data) {
+    const id = await productsModel.add(data);
+    return id;
+  },
+
+  async checkNotExists(id) {
+    const exists = await productsModel.exists(id);
+    if (!exists) throw new NotFoundError('Product not found');
+  },
+
   validateParamsId: runSchema(
     Joi.object({
       id: Joi.number().required().positive().integer(),
     }).required(),
   ),
-  async checkNotExists(id) {
-    const exists = await productsModel.exists(id);
-    if (!exists) throw new NotFoundError('Product not found');
-  },
+
+  validateBodyAdd: runSchema(
+    Joi.object({
+      name: Joi.string(),
+    }).required(),
+  ),
 };
 
 module.exports = productsService;

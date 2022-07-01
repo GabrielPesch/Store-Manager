@@ -2,12 +2,12 @@ const db = require('./connection');
 
 const productsModel = {
   async list() {
-    const listSql = 'SELECT * FROM products;';
+    const listSql = 'SELECT * FROM StoreManager.products;';
     const [products] = await db.execute(listSql);
     return products;
   },
   async exists(id) {
-    const existsSql = 'SELECT 1 FROM products WHERE id = ?;';
+    const existsSql = 'SELECT 1 FROM StoreManager.products WHERE id = ?;';
     const [[exists]] = await db.execute(existsSql, [id]);
     return !!exists;
   },
@@ -15,6 +15,13 @@ const productsModel = {
     const getSql = 'SELECT * FROM products WHERE id = ?;';
     const [[result]] = await db.execute(getSql, [id]);
     return result;
+  },
+  async add(data) {
+    const sql = `
+      INSERT INTO StoreManager.products (name)
+      VALUE (?);`;
+    const [{ insertId }] = await db.execute(sql, [data.name]);
+    return insertId;
   },
 };
 
