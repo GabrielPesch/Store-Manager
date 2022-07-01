@@ -1,7 +1,7 @@
 const Joi = require('joi');
 const productsModel = require('../models/productsModel');
-const { NotFoundError } = require('./errors');
-const { runSchema } = require('./validators');
+const { NotFoundError } = require('../middlewares/errors');
+const { runSchema } = require('../middlewares/validators');
 
 const productsService = {
   async list() {

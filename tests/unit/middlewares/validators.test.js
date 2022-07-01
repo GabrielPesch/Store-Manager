@@ -2,7 +2,8 @@ const chai = require('chai');
 const chaiAsPromised = require('chai-as-promised');
 const Joi = require('joi');
 const sinon = require('sinon');
-const { runSchema } = require('../../../services/validators');
+const { runSchema } = require('../../../middlewares/validators');
+
 
 chai.use(chaiAsPromised);
 

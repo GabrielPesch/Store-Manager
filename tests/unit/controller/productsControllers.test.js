@@ -6,7 +6,7 @@ const { PRODUCTS_LIST } = require('../../utilits/constants');
 const { expect } = require('chai');
 const { listAll } = require('../../../controllers/productsControllers');
 const productsController = require('../../../controllers/productsControllers');
-const { NotFoundError } = require('../../../services/errors');
+const { NotFoundError } = require('../../../middlewares/errors');
 
 chai.use(chaiAsPromised);
 

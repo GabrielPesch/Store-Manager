@@ -4,7 +4,7 @@ const chaiAsPromised = require('chai-as-promised');
 const productsModel = require('../../../models/productsModel');
 const productsService = require('../../../services/productsService');
 const { PRODUCTS_LIST } = require('../../utilits/constants');
-const { NotFoundError } = require('../../../services/errors');
+const { NotFoundError } = require('../../../middlewares/errors');
 
 chai.use(chaiAsPromised);
 
