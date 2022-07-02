@@ -19,7 +19,7 @@ const productsModel = {
   async add(data) {
     const sql = `
       INSERT INTO StoreManager.products (name)
-      VALUE (?);`;
+      VALUES (?);`;
     const [{ insertId }] = await db.execute(sql, [data.name]);
     return insertId;
   },

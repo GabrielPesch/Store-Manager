@@ -1,3 +1,4 @@
+const { expect } = require('chai');
 const chai = require('chai');
 const chaiAsPromised = require('chai-as-promised');
 const Joi = require('joi');
@@ -14,14 +15,14 @@ describe('validators', () => {
 
   describe('runSchema', () => {
     it('deve disparar um erro se o schema disparar um erro', () => {
-      sinon.stub(schema, 'validateAsync').rejects();
-      chai.expect(runSchema(schema)())
-        .to.eventually.be.rejected;
+      error = new Error('string.min');
+      sinon.stub(schema, 'validate').throws(error);
+     expect(() => runSchema(schema)()).to.throw(error);
     });
 
-    it('deve retornar alguma coisa se der certor', () => {
-      sinon.stub(schema, 'validateAsync').resolves();
-      chai.expect(runSchema(schema)()).to.eventually.be.undefined;
+    it('deve retornar algo se a validação for bem sucedida', () => {
+      sinon.stub(schema, 'validate').resolves({});
+      return chai.expect(runSchema(schema)()).to.be.undefined;
     });
   });
 });

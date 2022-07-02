@@ -32,8 +32,8 @@ const productsService = {
 
   validateBodyAdd: runSchema(
     Joi.object({
-      name: Joi.string(),
-    }).required(),
+      name: Joi.string().min(5).required(),
+    }),
   ),
 };
 

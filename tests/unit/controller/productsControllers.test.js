@@ -29,7 +29,7 @@ describe('controllers/productsController', () => {
 
     it('Deve disparar um erro se productsService disparar um erro', () => {
       sinon.stub(productsService, 'list').rejects();
-      chai.expect(productsService.list()).to.eventually.be.rejected;
+      return chai.expect(productsService.list()).to.eventually.be.rejected;
     });
 
     it('Deve retornar o status "200" quando for bem sucedido', async () => {
@@ -48,11 +48,7 @@ describe('controllers/productsController', () => {
     });
     it('Deve disparar um erro se validateParamsID disparar um erro', () => {
       sinon.stub(productsService, 'validateParamsId').rejects();
-      chai.expect(productsService.validateParamsId(1)).to.eventually.be.rejected;
-    });
-    it('Deve disparar um erro NotFoundError se o ID não existir', () => {
-      sinon.stub(productsService, 'checkNotExists').resolves(true);
-      chai.expect(productsService.checkNotExists(1)).to.eventually.be.rejectedWith(NotFoundError);
+      return chai.expect(productsService.validateParamsId(1)).to.eventually.be.rejected;
     });
     it('Deve retornar o status "200" quando for bem sucedido', async () => {
       sinon.stub(productsService, 'validateParamsId').resolves(1);
@@ -74,11 +70,7 @@ describe('controllers/productsController', () => {
     });
     it('Deve disparar um erro se validateBodyAdd disparar um erro', () => {
       sinon.stub(productsService, 'validateBodyAdd').rejects();
-      chai.expect(productsService.validateParamsId(1)).to.eventually.be.rejected;
-    });
-    it('Deve disparar um erro NotFoundError se o ID não existir', () => {
-      sinon.stub(productsService, 'checkNotExists').resolves(true);
-      chai.expect(productsService.checkNotExists(1)).to.eventually.be.rejectedWith(NotFoundError);
+      return chai.expect(productsService.validateBodyAdd({})).to.eventually.be.rejected;
     });
     it('Deve retornar o status "200" quando for bem sucedido', async () => {
       sinon.stub(productsService, 'validateBodyAdd').resolves();

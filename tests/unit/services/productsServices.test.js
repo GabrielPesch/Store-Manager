@@ -15,40 +15,40 @@ describe('services/productsService', () => {
   describe('list', () => {
     it('Espera  que dispare um erro caso o MODEL dispare um erro', () => {
       sinon.stub(productsModel, 'list').rejects();
-      chai.expect(productsService.list()).to
+      return chai.expect(productsService.list()).to
         .eventually.be.rejected;
     });
 
     it('Espera que retorne um array de items com chaves "id" e "name"', async () => {
       sinon.stub(productsModel, 'list').resolves(PRODUCTS_LIST);
       const result = await productsService.list();
-      chai.expect(result).to.deep.equal(PRODUCTS_LIST);
+      return chai.expect(result).to.deep.equal(PRODUCTS_LIST);
     });
   });
 
   describe('get', () => {
     it('Espera que dispare um erro caso o model dispare um erro', () => {
       sinon.stub(productsModel, 'get').rejects();
-      chai.expect(productsService.get(1))
+      return chai.expect(productsService.get(1))
         .to.eventually.be.rejected;
     });
 
     it('Espera que retorne uma array de item com chaves "id" e "name"', async () => {
       sinon.stub(productsModel, 'get').resolves(PRODUCTS_LIST);
       const result = await productsService.get();
-      chai.expect(result).to.deep.equal(PRODUCTS_LIST);
+      return chai.expect(result).to.deep.equal(PRODUCTS_LIST);
     });
   });
 
   describe('add', () => {
     it('Espera que dispare um erro caso o model dispare um erro', () => {
       sinon.stub(productsModel, 'add').rejects();
-      chai.expect(productsService.add(1))
+      return chai.expect(productsService.add(1))
         .to.eventually.be.rejected;
     });
     it('Deve retornar o ID como um número', () => {
       sinon.stub(productsModel, 'add').resolves(1);
-      chai.expect(productsService.add(0)).to.eventually.be.equal(1);
+      return chai.expect(productsService.add(0)).to.eventually.be.equal(1);
     });
   });
 
@@ -60,12 +60,12 @@ describe('services/productsService', () => {
     });
     it('Deve disparar um erro NotFoundError se o model responder false', () => {
       sinon.stub(productsModel, 'exists').resolves(false);
-      chai.expect(productsService.checkNotExists(0))
+      return chai.expect(productsService.checkNotExists(0))
         .to.eventually.be.rejectedWith(NotFoundError);
     });
     it('Deve resolver sem problemas se o model responder true', () => {
       sinon.stub(productsModel, 'exists').resolves(true);
-      chai.expect(productsService.checkNotExists(0))
+      return chai.expect(productsService.checkNotExists(0))
         .to.eventually.be.undefined;
     });
   });
