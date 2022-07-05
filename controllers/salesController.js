@@ -22,6 +22,13 @@ const salesController = {
     return res.status(201).json(message);
   }, 
 
+  async remove(req, res) {
+    const { id } = await salesService.validateParamsId(req.params);
+    await salesService.checkExists(id);
+    await salesService.remove(id);
+    res.sendStatus(204);
+  },
+
 };
 
 module.exports = salesController;

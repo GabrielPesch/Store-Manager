@@ -39,6 +39,10 @@ const salesService = {
     if (!exists) throw new NotFoundError('Sale not found');
   },
 
+  async remove(id) {
+    await salesModel.remove(id);
+  },
+
   validateBodyAdd: runSchema(
     Joi.array().items(Joi.object(({
       productId: Joi.number()
