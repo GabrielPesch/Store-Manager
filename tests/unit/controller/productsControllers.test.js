@@ -2,87 +2,77 @@ const sinon = require('sinon');
 const chai = require('chai');
 const chaiAsPromised = require('chai-as-promised');
 const productsService = require('../../../services/productsService');
-const { PRODUCTS_LIST } = require('../../utilits/constants');
-const { expect } = require('chai');
-const { listAll } = require('../../../controllers/productsControllers');
+;
 const productsController = require('../../../controllers/productsControllers');
-const { NotFoundError } = require('../../../middlewares/errors');
+const { makeRes } = require('./utils');
 
 chai.use(chaiAsPromised);
 
 
 describe('controllers/productsController', () => {
-  const response = {};
-  const request = {};
-
-  // beforeEach(sinon.restore);
-  beforeEach(() => {
-    sinon.restore();
-    response.status = sinon.stub().returns(response);
-    response.json = sinon.stub().returns();
-  })
+  beforeEach(sinon.restore);
 
   describe('listAll', () => {
-    before(() => {  
-      sinon.stub(productsService, 'list').resolves({ PRODUCTS_LIST });
-    });
-
-    it('Deve disparar um erro se productsService disparar um erro', () => {
+    it('Deve disparar um erro se productsService.list disparar um erro', () => {
       sinon.stub(productsService, 'list').rejects();
-      return chai.expect(productsService.list()).to.eventually.be.rejected;
+      return chai.expect(productsService.list({}, {})).to.eventually.be.rejected;
     });
 
-    it('Deve retornar o status "200" quando for bem sucedido', async () => {
-      await productsController.listAll(request, response);
-      expect(response.status.calledWith(200)).to.be.equal(true);
+    it('Deve chamar o status "200" e o res.json', async () => {
+      const res = makeRes()
+      sinon.stub(productsService, 'list').resolves([{ id: 1 }]);
+      await productsController.listAll({}, res);
+      return chai.expect(res.json.getCall(0).args[0]).to.deep.equal([{ id: 1 }]);
     });
-    it('Deve retornar uma lista de produtos', async () => {
-      await productsController.listAll(request, response);
-      expect(response.json.calledWith(sinon.match.array)).to.be.equal(true)
-    })
   });
-
   describe('get', () => {
-    beforeEach(() => {
-      sinon.stub(productsService, 'get').resolves({})
-    });
-    it('Deve disparar um erro se validateParamsID disparar um erro', () => {
+    it('Deve disparar um erro caso productsService.validateParams também dispare', () => {
       sinon.stub(productsService, 'validateParamsId').rejects();
-      return chai.expect(productsService.validateParamsId(1)).to.eventually.be.rejected;
+      return chai.expect(productsController.get({}, {})).to.eventually.be.rejected;
     });
-    it('Deve retornar o status "200" quando for bem sucedido', async () => {
-      sinon.stub(productsService, 'validateParamsId').resolves(1);
-      sinon.stub(productsService, 'checkNotExists').resolves(undefined);
-      await productsController.get(request, response);
-      expect(response.status.calledWith(200)).to.be.equal(true);
+    it('Deve disparar um erro caso productsService.checkExists também dispare', () => {
+      sinon.stub(productsService, 'validateParamsId').resolves({});
+      sinon.stub(productsService, 'checkExists').rejects();
+      return chai.expect(productsController.get({}, {})).to.eventually.be.rejected;
     });
-    it('Deve ser chamado o método "json" passando um objeto', async () => {
-      sinon.stub(productsService, 'validateParamsId').resolves(1);
-      sinon.stub(productsService, 'checkNotExists').resolves(undefined);
-      await productsController.get(request, response);
-      expect(response.json.calledWith(sinon.match.object)).to.be.equal(true)
+    it('Deve disparar um ero caso productsService.get também dispare', () => {
+      sinon.stub(productsService, 'validateParamsId').resolves({});
+      sinon.stub(productsService, 'checkExists').resolves();
+      sinon.stub(productsService, 'get').rejects();
+      return chai.expect(productsController.get({}, {})).to.eventually.be.rejected;
+    });
+    it('Deve chamar o status "200" e o res.json', async () => {
+      sinon.stub(productsService, 'validateParamsId').resolves({});
+      sinon.stub(productsService, 'checkExists').resolves();
+      sinon.stub(productsService, 'get').resolves({ id: 1 });
+      const res = makeRes();
+      await productsController.get({}, res);
+      return chai.expect(res.json.getCall(0).args[0]).to.deep.equal({ id: 1 });
     });
   });
-
   describe('add', () => {
-    beforeEach(() => {
-      sinon.stub(productsService, 'get').resolves({})
-    });
-    it('Deve disparar um erro se validateBodyAdd disparar um erro', () => {
+    it('Deve disparar um erro caso productsService.validateBodyAdd também dispare', () => {
       sinon.stub(productsService, 'validateBodyAdd').rejects();
-      return chai.expect(productsService.validateBodyAdd({})).to.eventually.be.rejected;
+      return chai.expect(productsController.add({}, {})).to.eventually.be.rejected;
     });
-    it('Deve retornar o status "200" quando for bem sucedido', async () => {
+    it('Deve disparar um erro caso productsService.add também dispare', () => {
       sinon.stub(productsService, 'validateBodyAdd').resolves();
-      sinon.stub(productsService, 'add').resolves(1);
-      await productsController.add(request, response);
-      expect(response.status.calledWith(201)).to.be.equal(true);
+      sinon.stub(productsService, 'add').rejects()
+      return chai.expect(productsController.add({}, {})).to.eventually.be.rejected;
     });
-    it('Deve ser chamado o método "json" passando um objeto', async () => {
+    it('Deve disparar um erro caso productsService.get tambem dispare', () => {
       sinon.stub(productsService, 'validateBodyAdd').resolves();
-      sinon.stub(productsService, 'add').resolves(1);
-      await productsController.add(request, response);
-      expect(response.json.calledWith(sinon.match.object)).to.be.equal(true)
+      sinon.stub(productsService, 'add').resolves();
+      sinon.stub(productsService, 'get').rejects();
+      return chai.expect(productsController.add({}, {})).to.eventually.be.rejected;
+    });
+    it('Deve chamar o res.status com 201 e o res.json', async () => {
+      sinon.stub(productsService, 'validateBodyAdd').resolves();
+      sinon.stub(productsService, 'add').resolves();
+      sinon.stub(productsService, 'get').resolves({ id: 1 });
+      const res = makeRes();
+      await productsController.add({}, res);
+      return chai.expect(res.json.getCall(0).args[0]).to.deep.equal({ id: 1 });
     });
   });
 });
