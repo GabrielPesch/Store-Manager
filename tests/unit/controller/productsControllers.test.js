@@ -35,7 +35,7 @@ describe('controllers/productsController', () => {
       sinon.stub(productsService, 'checkExists').rejects();
       return chai.expect(productsController.get({}, {})).to.eventually.be.rejected;
     });
-    it('Deve disparar um ero caso productsService.get também dispare', () => {
+    it('Deve disparar um erro caso productsService.get também dispare', () => {
       sinon.stub(productsService, 'validateParamsId').resolves({});
       sinon.stub(productsService, 'checkExists').resolves();
       sinon.stub(productsService, 'get').rejects();

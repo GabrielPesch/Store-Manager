@@ -18,11 +18,11 @@
     "colId": "04663bb0-5c30-4e33-849d-6fd7e19f2fb9",
     "containerId": "eac5ea65-5442-40eb-84ad-63fd5a1896fc",
     "name": "getProduct",
-    "url": "localhost:3000/products/7",
+    "url": "localhost:3000/products/4",
     "method": "GET",
     "sortNum": 20000,
     "created": "2022-06-30T02:56:09.223Z",
-    "modified": "2022-07-01T22:12:50.916Z",
+    "modified": "2022-07-05T04:01:18.689Z",
     "headers": [],
     "params": [],
     "tests": []

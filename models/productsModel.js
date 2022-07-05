@@ -12,7 +12,7 @@ const productsModel = {
     return !!exists;
   },
   async get(id) {
-    const getSql = 'SELECT * FROM products WHERE id = ?;';
+    const getSql = 'SELECT * FROM StoreManager.products WHERE id = ?;';
     const [[result]] = await db.execute(getSql, [id]);
     return result;
   },
