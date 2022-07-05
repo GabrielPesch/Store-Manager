@@ -23,6 +23,11 @@ const productsModel = {
     const [{ insertId }] = await db.execute(sql, [data.name]);
     return insertId;
   },
+  async listAllIds() {
+    const sql = 'SELECT id FROM StoreManager.products';
+    const [items] = await db.execute(sql);
+    return items;
+  },
 };
 
 module.exports = productsModel;

@@ -7,7 +7,7 @@ const productsController = {
   },
   async get(req, res) {
     const { id } = await productsService.validateParamsId(req.params);
-    await productsService.checkNotExists(id);
+    await productsService.checkExists(id);
     const product = await productsService.get(id);
     return res.status(200).json(product);
   },

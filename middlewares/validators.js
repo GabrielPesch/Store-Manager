@@ -4,8 +4,8 @@ const runSchema = (schema) => (unknown) => {
   
   if (error) {
     error.message = error.details[0].message;
-    // types of error = https://github.com/sideway/joi/blob/v14.3.1/API.md#list-of-errors
     switch (error.details[0].type) {
+      case 'number.min':
       case 'string.min':
         error.code = 422;
         break;
