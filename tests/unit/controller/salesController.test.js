@@ -74,4 +74,30 @@ describe('controller/salesController', () => {
       return chai.expect(res.json.getCall(0).args[0]).to.deep.equal({ id: 1, itemsSold: [{ productId: 1 } ]});
     });
   });
+
+  describe('remove', () => {
+    it('Deve disparar um erro caso salesService.validateParamsId também dispare', () => {
+      sinon.stub(salesService, 'validateParamsId').rejects();
+      return chai.expect(salesController.remove({}, {})).to.eventually.be.rejected;
+    });
+    it('Deve disparar um erro caso salesSErvice.checkExists também dispare', () => {
+      sinon.stub(salesService, 'validateParamsId').resolves();
+      sinon.stub(salesService, 'checkExists').rejects();
+      return chai.expect(salesController.remove({}, {})).to.eventually.be.rejected;
+    });
+    it('Deve disparar um erro caso SalesService.remove também dispare', () => {
+      sinon.stub(salesService, 'validateParamsId').resolves();
+      sinon.stub(salesService, 'checkExists').resolves();
+      sinon.stub(salesService, 'remove').rejects();
+      return chai.expect(salesController.remove({}, {})).to.eventually.be.rejected;
+    });
+    it('Deve chamar o res.sendStatus com o status 204 caso haja sucesso', async () => {
+      sinon.stub(salesService, 'validateParamsId').resolves({id: 1});
+      sinon.stub(salesService, 'checkExists').resolves();
+      sinon.stub(salesService, 'remove').resolves();
+      const res = makeRes();
+      await salesController.remove({}, res);
+      return chai.expect(res.sendStatus.getCall(0).args[0]).to.equal(204);
+    });
+  });
 });

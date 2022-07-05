@@ -91,4 +91,15 @@ describe('models/salesModel', () => {
       return chai.expect(salesModel.getBySaleId(1)).to.eventually.be.deep.equal({});
     });
   });
+
+  describe('remove', () => {
+    it('Deve disparar um erro caso o db.execute também dispare', () => {
+      sinon.stub(db, 'execute').rejects();
+      return chai.expect(salesModel.remove(1)).to.eventually.be.rejected;
+    })
+    it('Deve retornar undefined caso haja sucesso', () => {
+      sinon.stub(db, 'execute').resolves();
+      return chai.expect(salesModel.remove(1)).to.eventually.be.undefined
+    });
+  });
 });

@@ -138,7 +138,7 @@ describe('controllers/productsController', () => {
       sinon.stub(productsService, 'remove').rejects();
       return chai.expect(productsController.remove({}, {})).to.eventually.be.rejected;
     });
-    it('Deve chamar o res.sendStatus com o satus 204 caso sucess', async () => {
+    it('Deve chamar o res.sendStatus com o satus 204 caso haja sucesso', async () => {
       sinon.stub(productsService, 'validateParamsId').resolves({id: 1});
       sinon.stub(productsService, 'checkExists').resolves();
       sinon.stub(productsService, 'remove').resolves();

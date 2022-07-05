@@ -68,19 +68,19 @@ describe('services/productsService', () => {
 
   describe('edit', () => {
     it('Deve disparar um erro caso productsModel.edit dispare um erro', () => {
-      sinon.stub(productsModel, 'edit').rejects;
-      chai.expect(productsService.edit(1, {})).to.eventually.be.undefined;
+      sinon.stub(productsModel, 'edit').rejects();
+      return chai.expect(productsService.edit(1, {})).to.eventually.be.rejected;
     });
     it('Deve retornar undefine caso productsModel altere o produto', () => {
       sinon.stub(productsModel, 'edit').resolves();
-      chai.expect(productsService.edit(1, {})).to.eventually.be.undefined;
+      return chai.expect(productsService.edit(1, {})).to.eventually.be.undefined;
     });
   });
 
   describe('remove', () => {
     it('Deve disparar um erro caso productsModel.remove dispare um erro', () => {
-      sinon.stub(productsModel, 'remove').rejects;
-      chai.expect(productsService.remove(1, {})).to.eventually.be.undefined;
+      sinon.stub(productsModel, 'remove').rejects();
+      return chai.expect(productsService.remove(1, {})).to.eventually.be.rejected;
     });
     it('Deve retornar undefined caso productsModel.remove remova o produto', () => {
       sinon.stub(productsModel, 'remove').resolves();

@@ -84,4 +84,15 @@ describe('services/salesService', () => {
       return chai.expect(salesService.checkExists(0)).to.eventually.be.undefined;
     });
   });
+
+  describe('remove', () => {
+    it('Deve disparar um erro caso salesModel.remove dispare um erro', () => {
+      sinon.stub(salesModel, 'remove').rejects;
+      return chai.expect(salesService.remove(1)).to.eventually.be.undefined;
+    });
+    it('Deve retornar undefined caso salesModel.remove remova o produto', () => {
+      sinon.stub(salesModel, 'remove').resolves();
+      return chai.expect(salesService.remove(1)).to.eventually.be.undefined;
+    });
+  });
 });
