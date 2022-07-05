@@ -6,6 +6,11 @@ const salesModel = require('../models/salesModel');
 
 const salesService = {
 
+  async list() {
+    const sales = await salesModel.list();
+    return sales;
+  },
+
   async add(data) {
     const saleId = await salesModel.addSale();
     const dataMap = data.map((sale) => [saleId, sale.productId, sale.quantity]);
@@ -29,6 +34,11 @@ const salesService = {
     });
   },
 
+  async checkExists(id) {
+    const exists = await salesModel.exists(id);
+    if (!exists) throw new NotFoundError('Sale not found');
+  },
+
   validateBodyAdd: runSchema(
     Joi.array().items(Joi.object(({
       productId: Joi.number()
@@ -42,6 +52,12 @@ const salesService = {
         .min(1)
         .label('quantity'),
     }))),
+  ),
+
+  validateParamsId: runSchema(
+    Joi.object({
+      id: Joi.number().required().positive().integer(),
+    }).required(),
   ),
 };
 
