@@ -32,6 +32,13 @@ const productsModel = {
     await db.query(editSql, [changes, id]);
   },
 
+  async remove(id) {
+    const removeSql = `
+    DELETE from StoreManager.products
+    WHERE id = ?`;
+    await db.execute(removeSql, [id]);
+  },
+
   async listAllIds() {
     const sql = 'SELECT id FROM StoreManager.products';
     const [items] = await db.execute(sql);

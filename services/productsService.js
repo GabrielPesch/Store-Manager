@@ -28,6 +28,10 @@ const productsService = {
     await productsModel.edit(id, changes);
   },
 
+  async remove(id) {
+    await productsModel.remove(id);
+  },
+
   validateParamsId: runSchema(
     Joi.object({
       id: Joi.number().required().positive().integer(),
