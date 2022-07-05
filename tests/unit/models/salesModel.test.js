@@ -3,11 +3,40 @@ const chai = require('chai');
 const chaiAsPromised = require('chai-as-promised');
 const db = require('../../../models/connection');
 const salesModel = require('../../../models/salesModel');
-
 chai.use(chaiAsPromised);
 
 describe('models/salesModel', () => {
   beforeEach(sinon.restore);
+
+  describe('list', () => {
+    it('Deve disparar um erro caso db.execute dispare um erro', () => {
+      sinon.stub(db, 'execute').rejects();
+      return chai.expect(salesModel.list()).to.eventually.be.rejected;
+    });
+    it('Deve retornar uma lista caso db.execute retorne', () => {
+      sinon.stub(db, 'execute').resolves([]);
+      return chai.expect(salesModel.list()).to.eventually.be.undefined;
+    });
+  });
+
+  describe('exists', () => {
+    it('Deve disparar um erro caso db.execute dispare um erro', () => {
+      sinon.stub(db, 'execute').rejects();
+      return chai.expect(salesModel.exists(1)).to.eventually.be.rejected;
+    });
+    it('Deve disparar um erro caso db.execute não retorne um array', () => {
+      sinon.stub(db, 'execute').resolves([]);
+      return chai.expect(salesModel.exists(1)).to.eventually.be.rejected;
+    });
+    it('Deve retornar false se db.execute retornar false', () => {
+      sinon.stub(db, 'execute').resolves([[]]);
+      return chai.expect(salesModel.exists(1)).to.eventually.be.false;
+    });
+    it('Deve retornar true se db.execute retornar true', () => {
+      sinon.stub(db, 'execute').resolves([[{}]]);
+      return chai.expect(salesModel.exists(1)).to.eventually.be.true;
+    })
+  });
 
   describe('addSale', () => {
     it('Deve disparar um erro caso o MYSQL dispare um erro', () => {

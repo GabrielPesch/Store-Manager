@@ -51,7 +51,7 @@ describe('services/productsService', () => {
   describe('checkExists', () => {
     it('Deve disparar um erro caso productsModel também disparar', () => {
       sinon.stub(productsModel, 'exists').rejects();
-      chai.expect(productsService.checkExists(0))
+      return chai.expect(productsService.checkExists(0))
         .to.eventually.be.rejected;
     });
     it('Deve disparar um erro caso productsModel retorne false', () => {
