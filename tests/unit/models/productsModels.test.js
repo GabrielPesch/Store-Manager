@@ -92,6 +92,17 @@ describe('models/productsModel', () => {
     });
   });
 
+  describe('remove', () => {
+    it('Deve disparar um erro caso o db.execute também dispare', () => {
+      sinon.stub(db, 'execute').rejects();
+      return chai.expect(productsModel.remove(1)).to.eventually.be.rejected;
+    });
+    it('Deve retornar undefined caso haja sucesso', () => {
+      sinon.stub(db, 'execute').resolves();
+      return chai.expect(productsModel.remove(1)).to.eventually.be.undefined
+    });
+  });
+
   describe('listAllids', () => {
     it('Deve disparar um erro caso db.execute dispare um erro', () => {
       sinon.stub(db, 'execute').rejects();

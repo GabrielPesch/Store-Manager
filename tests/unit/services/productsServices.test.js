@@ -76,4 +76,15 @@ describe('services/productsService', () => {
       chai.expect(productsService.edit(1, {})).to.eventually.be.undefined;
     });
   });
+
+  describe('remove', () => {
+    it('Deve disparar um erro caso productsModel.remove dispare um erro', () => {
+      sinon.stub(productsModel, 'remove').rejects;
+      chai.expect(productsService.remove(1, {})).to.eventually.be.undefined;
+    });
+    it('Deve retornar undefined caso productsModel.remove remova o produto', () => {
+      sinon.stub(productsModel, 'remove').resolves();
+      return chai.expect(productsService.remove(1)).to.eventually.be.undefined;
+    });
+  });
 });

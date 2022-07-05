@@ -25,6 +25,7 @@ describe('controllers/productsController', () => {
       return chai.expect(res.json.getCall(0).args[0]).to.deep.equal([{ id: 1 }]);
     });
   });
+
   describe('get', () => {
     it('Deve disparar um erro caso productsService.validateParams também dispare', () => {
       sinon.stub(productsService, 'validateParamsId').rejects();
@@ -50,6 +51,7 @@ describe('controllers/productsController', () => {
       return chai.expect(res.json.getCall(0).args[0]).to.deep.equal({ id: 1 });
     });
   });
+
   describe('add', () => {
     it('Deve disparar um erro caso productsService.validateBodyAdd também dispare', () => {
       sinon.stub(productsService, 'validateBodyAdd').rejects();
@@ -75,6 +77,7 @@ describe('controllers/productsController', () => {
       return chai.expect(res.json.getCall(0).args[0]).to.deep.equal({ id: 1 });
     });
   });
+
   describe('edit', () => {
     it('DEve disparar um erro caso productsService.validateParamsId também dispare', () => {
       sinon.stub(productsService, 'validateParamsId').rejects();
@@ -116,6 +119,32 @@ describe('controllers/productsController', () => {
       const res = makeRes();
       await productsController.edit({}, res);
       return chai.expect(res.json.getCall(0).args[0]).to.deep.equal({});
+    });
+  });
+
+  describe('remove', () => {
+    it('Deve disparar um erro caso productsService.validateParamsID também dispare', () => {
+      sinon.stub(productsService, 'validateParamsId').rejects();
+      return chai.expect(productsController.remove({}, {})).to.eventually.be.rejected;
+    });
+    it('Deve disparar um erro caso productsService.checkExists também dispare', () => {
+      sinon.stub(productsService, 'validateParamsId').resolves();
+      sinon.stub(productsService, 'checkExists').rejects()
+      return chai.expect(productsController.remove({}, {})).to.eventually.be.rejected;
+    });
+    it('Deve disparar um erro caso productsService.remove também dispare', () => {
+      sinon.stub(productsService, 'validateParamsId').resolves();
+      sinon.stub(productsService, 'checkExists').resolves();
+      sinon.stub(productsService, 'remove').rejects();
+      return chai.expect(productsController.remove({}, {})).to.eventually.be.rejected;
+    });
+    it('Deve chamar o res.sendStatus com o satus 204 caso sucess', async () => {
+      sinon.stub(productsService, 'validateParamsId').resolves({id: 1});
+      sinon.stub(productsService, 'checkExists').resolves();
+      sinon.stub(productsService, 'remove').resolves();
+      const res = makeRes();
+      await productsController.remove({}, res);
+      return chai.expect(res.sendStatus.getCall(0).args[0]).to.equal(204);
     });
   });
 });
