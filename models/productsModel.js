@@ -23,6 +23,15 @@ const productsModel = {
     const [{ insertId }] = await db.execute(sql, [data.name]);
     return insertId;
   },
+
+  async edit(id, changes) {
+    const editSql = `
+    UPDATE StoreManager.products
+    SET ?
+    WHERE id = ?`;
+    await db.query(editSql, [changes, id]);
+  },
+
   async listAllIds() {
     const sql = 'SELECT id FROM StoreManager.products';
     const [items] = await db.execute(sql);

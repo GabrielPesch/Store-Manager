@@ -24,6 +24,10 @@ const productsService = {
     if (!exists) throw new NotFoundError('Product not found');
   },
 
+  async edit(id, changes) {
+    await productsModel.edit(id, changes);
+  },
+
   validateParamsId: runSchema(
     Joi.object({
       id: Joi.number().required().positive().integer(),
