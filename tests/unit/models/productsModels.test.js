@@ -81,6 +81,17 @@ describe('models/productsModel', () => {
     });
   });
 
+  describe('edit', () => {
+    it('Deve disparar um erro caso o db.query dispare', () => {
+      sinon.stub(db, 'query').rejects();
+      return chai.expect(productsModel.edit(1, {})).to.eventually.be.rejected;
+    });
+    it('Deve retornar undefined caso haja sucesso', () => {
+      sinon.stub(db, 'query').resolves();
+      return chai.expect(productsModel.edit(1, {})).to.eventually.be.undefined
+    });
+  });
+
   describe('listAllids', () => {
     it('Deve disparar um erro caso db.execute dispare um erro', () => {
       sinon.stub(db, 'execute').rejects();

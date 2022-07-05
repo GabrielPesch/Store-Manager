@@ -65,4 +65,15 @@ describe('services/productsService', () => {
         .to.eventually.be.undefined;
     });
   });
+
+  describe('edit', () => {
+    it('Deve disparar um erro caso productsModel.edit dispare um erro', () => {
+      sinon.stub(productsModel, 'edit').rejects;
+      chai.expect(productsService.edit(1, {})).to.eventually.be.undefined;
+    });
+    it('Deve retornar undefine caso productsModel altere o produto', () => {
+      sinon.stub(productsModel, 'edit').resolves();
+      chai.expect(productsService.edit(1, {})).to.eventually.be.undefined;
+    });
+  });
 });

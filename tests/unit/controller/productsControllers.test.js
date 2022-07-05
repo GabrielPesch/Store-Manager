@@ -75,4 +75,47 @@ describe('controllers/productsController', () => {
       return chai.expect(res.json.getCall(0).args[0]).to.deep.equal({ id: 1 });
     });
   });
+  describe('edit', () => {
+    it('DEve disparar um erro caso productsService.validateParamsId também dispare', () => {
+      sinon.stub(productsService, 'validateParamsId').rejects();
+      sinon.stub(productsService, 'validateBodyAdd').resolves();
+      return chai.expect(productsController.edit({}, {})).to.eventually.be.rejected;
+    });
+    it('Deve disparar um erro caso productsService.validateBodyAdd também dispare', () => {
+      sinon.stub(productsService, 'validateParamsId').resolves();
+      sinon.stub(productsService, 'validateBodyAdd').rejects();
+      return chai.expect(productsController.edit({}, {})).to.eventually.be.rejected;
+    });
+    it('Deve disparar um erro caso productsService.checkExists também dispare', () => {
+      sinon.stub(productsService, 'validateParamsId').resolves();
+      sinon.stub(productsService, 'validateBodyAdd').resolves();
+      sinon.stub(productsService, 'checkExists').rejects();
+      return chai.expect(productsController.edit({}, {})).to.eventually.be.rejected;
+    });
+    it('Deve disparar um erro caso productsService.edit também dispare', () => {
+      sinon.stub(productsService, 'validateParamsId').resolves();
+      sinon.stub(productsService, 'validateBodyAdd').resolves();
+      sinon.stub(productsService, 'checkExists').resolves();
+      sinon.stub(productsService, 'edit').rejects();
+      return chai.expect(productsController.edit({}, {})).to.eventually.be.rejected;
+    });
+    it('Deve disparar um erro caso productsService.get também dispare', () => {
+      sinon.stub(productsService, 'validateParamsId').resolves();
+      sinon.stub(productsService, 'validateBodyAdd').resolves();
+      sinon.stub(productsService, 'checkExists').resolves();
+      sinon.stub(productsService, 'edit').resolves();
+      sinon.stub(productsService, 'get').rejects();
+      return chai.expect(productsController.edit({}, {})).to.eventually.be.rejected;
+    });
+    it('Deve retornar o objeto casto tenha sucesso', async () => {
+      sinon.stub(productsService, 'validateParamsId').resolves({id: 1});
+      sinon.stub(productsService, 'validateBodyAdd').resolves();
+      sinon.stub(productsService, 'checkExists').resolves();
+      sinon.stub(productsService, 'edit').resolves();
+      sinon.stub(productsService, 'get').resolves({});
+      const res = makeRes();
+      await productsController.edit({}, res);
+      return chai.expect(res.json.getCall(0).args[0]).to.deep.equal({});
+    });
+  });
 });
