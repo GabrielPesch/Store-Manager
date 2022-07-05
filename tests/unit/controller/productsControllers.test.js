@@ -79,7 +79,7 @@ describe('controllers/productsController', () => {
   });
 
   describe('edit', () => {
-    it('DEve disparar um erro caso productsService.validateParamsId também dispare', () => {
+    it('Deve disparar um erro caso productsService.validateParamsId também dispare', () => {
       sinon.stub(productsService, 'validateParamsId').rejects();
       sinon.stub(productsService, 'validateBodyAdd').resolves();
       return chai.expect(productsController.edit({}, {})).to.eventually.be.rejected;

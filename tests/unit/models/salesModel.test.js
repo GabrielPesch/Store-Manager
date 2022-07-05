@@ -102,4 +102,15 @@ describe('models/salesModel', () => {
       return chai.expect(salesModel.remove(1)).to.eventually.be.undefined
     });
   });
+
+  describe('edit', () => {
+    it('Deve disparar um erro caso db.query dispare um erro', () => {
+      sinon.stub(db, 'query').rejects();
+      return chai.expect(salesModel.edit({}, {})).to.eventually.be.rejected;
+    });
+    it('Deve retornar undefined caso haja sucesso', () => {
+      sinon.stub(db, 'query').resolves();
+      return chai.expect(salesModel.edit({}, {})).to.eventually.be.undefined;
+    });
+  });
 });

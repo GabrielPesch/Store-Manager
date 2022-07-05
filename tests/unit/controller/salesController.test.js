@@ -100,4 +100,48 @@ describe('controller/salesController', () => {
       return chai.expect(res.sendStatus.getCall(0).args[0]).to.equal(204);
     });
   });
+
+  describe('edit', () => {
+    it('Deve disparar um erro caso salesService.validateParamsId também dispare', () => {
+      sinon.stub(salesService, 'validateParamsId').rejects();
+      sinon.stub(salesService, 'validateBodyAdd').resolves();
+      return chai.expect(salesController.edit({}, {})).to.eventually.be.rejected
+    });
+    it('Deve disparar um erro caso salesService.bodyParamsId também dispare', () => {
+      sinon.stub(salesService, 'validateParamsId').resolves();
+      sinon.stub(salesService, 'validateBodyAdd').rejects();
+      return chai.expect(salesController.edit({}, {})).to.eventually.be.rejected;
+    });
+    it('Deve disparar um erro caso salesService.checkExists também dispare', () => {
+      sinon.stub(salesService, 'validateParamsId').resolves();
+      sinon.stub(salesService, 'validateBodyAdd').resolves();
+      sinon.stub(salesService, 'checkExists').rejects();
+      return chai.expect(salesController.edit({}, {})).to.eventually.be.rejected;
+    });
+    it('Deve disparar um erro caso salesService.checkIfArrayOfIdsExists', () => {
+      sinon.stub(salesService, 'validateParamsId').resolves();
+      sinon.stub(salesService, 'validateBodyAdd').resolves();
+      sinon.stub(salesService, 'checkExists').resolves();
+      sinon.stub(salesService, 'checkIfArrayOfIdsExists').rejects();
+      return chai.expect(salesController.edit({}, {})).to.eventually.be.rejected;
+    });
+    it('Deve disparar um erro caso salesService.edit', () => {
+      sinon.stub(salesService, 'validateParamsId').resolves();
+      sinon.stub(salesService, 'validateBodyAdd').resolves();
+      sinon.stub(salesService, 'checkExists').resolves();
+      sinon.stub(salesService, 'checkIfArrayOfIdsExists').resolves();
+      sinon.stub(salesService, 'edit').rejects();
+      return chai.expect(salesController.edit({}, {})).to.eventually.be.rejected;
+    });
+    it('Deve retornar o objeto caso tenha sucesso', async () => {
+      sinon.stub(salesService, 'validateParamsId').resolves({ id: 1 });
+      sinon.stub(salesService, 'validateBodyAdd').resolves([{ productId: 1 }]);
+      sinon.stub(salesService, 'checkExists').resolves();
+      sinon.stub(salesService, 'checkIfArrayOfIdsExists').resolves();
+      sinon.stub(salesService, 'edit').resolves();
+      const res = makeRes();
+      await salesController.edit({}, res)
+      return chai.expect(res.json.getCall(0).args[0]).to.deep.equal({ saleId: 1, itemsUpdated: [{productId: 1}] });
+    });
+  });
 });

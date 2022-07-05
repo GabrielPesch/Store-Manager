@@ -41,6 +41,21 @@ describe('services/salesService', () => {
     });
   });
 
+  describe('edit', () => {
+    it('deve disparar um erro caso salesModel.edit dispare um erro', () => {
+      sinon.stub(salesModel, 'edit').rejects();
+      return chai.expect(salesService.edit(1, {})).to.eventually.be.rejected;
+    });
+    it('Deve disparar um erro caso o parametro "changes" não seja um array', () => {
+      sinon.stub(salesModel, 'edit').resolves();
+      return chai.expect(salesService.edit(1, {})).to.eventually.be.rejected;
+    });
+    it('Deve retornar undefined caso sucesso', () => {
+      sinon.stub(salesModel, 'edit').resolves();
+      return chai.expect(salesService.edit(1, [{}])).to.eventually.be.undefined;
+    });
+  });
+
   describe('get', () => {
     it('Deve disparar um erro caso salesModel.get dispare um erro', () => {
       sinon.stub(salesModel, 'getBySaleId').rejects();
