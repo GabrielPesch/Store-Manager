@@ -18,6 +18,12 @@ const salesService = {
     return saleId;
   },
 
+  async edit(id, changes) {
+    const changesPromises = changes
+      .map(({ productId, quantity }) => salesModel.edit([quantity, id, productId]));
+    await Promise.all(changesPromises);
+  },
+
   async get(id) {
    const sales = await salesModel.getBySaleId(id);
     return sales;
