@@ -144,5 +144,25 @@
       "form": []
     },
     "tests": []
+  },
+  {
+    "_id": "8b3a115f-89f3-4631-b078-ee2f0cce2cd0",
+    "colId": "04663bb0-5c30-4e33-849d-6fd7e19f2fb9",
+    "containerId": "eac5ea65-5442-40eb-84ad-63fd5a1896fc",
+    "name": "getByName",
+    "url": "localhost:3000/products/search?q=",
+    "method": "GET",
+    "sortNum": 80000,
+    "created": "2022-07-06T00:00:05.500Z",
+    "modified": "2022-07-06T00:03:02.656Z",
+    "headers": [],
+    "params": [
+      {
+        "name": "q",
+        "value": "",
+        "isPath": false
+      }
+    ],
+    "tests": []
   }
 ]

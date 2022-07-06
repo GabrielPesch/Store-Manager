@@ -6,16 +6,27 @@ const productsModel = {
     const [products] = await db.execute(listSql);
     return products;
   },
+
   async exists(id) {
     const existsSql = 'SELECT 1 FROM StoreManager.products WHERE id = ?;';
     const [[exists]] = await db.execute(existsSql, [id]);
     return !!exists;
   },
+
   async get(id) {
     const getSql = 'SELECT * FROM StoreManager.products WHERE id = ?;';
     const [[result]] = await db.execute(getSql, [id]);
     return result;
   },
+
+  async getByName(query) {
+    const getSQL = `
+    SELECT * FROM StoreManager.products
+     WHERE name LIKE ?`;
+    const [products] = await db.execute(getSQL, [`%${query}%`]);
+    return products;
+  },
+
   async add(data) {
     const sql = `
       INSERT INTO StoreManager.products (name)

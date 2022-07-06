@@ -14,6 +14,11 @@ const productsService = {
     return product;
   },
 
+  async getByName(query) {
+    const products = await productsModel.getByName(query);
+    return products;
+  },
+
   async add(data) {
     const id = await productsModel.add(data);
     return id;
@@ -43,6 +48,13 @@ const productsService = {
       name: Joi.string().min(5).required(),
     }),
   ),
+
+  ValidadeQueryName: runSchema(
+    Joi.object({
+      q: Joi.string().min(1),
+    }),
+  ),
+
 };
 
 module.exports = productsService;

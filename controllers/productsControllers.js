@@ -13,6 +13,17 @@ const productsController = {
     return res.status(200).json(product);
   },
 
+  async getByName(req, res) {
+    const { q: queryByName } = req.query;
+    if (!queryByName) {
+        await productsController.listAll(req, res);
+        return;
+      }
+    await productsService.ValidadeQueryName(req.query);
+    const products = await productsService.getByName(queryByName);
+    return res.status(200).json(products);
+  },
+
   async add(req, res) {
     const data = await productsService.validateBodyAdd(req.body);
     const id = await productsService.add(data);
