@@ -15,7 +15,7 @@ describe('controllers/productsController', () => {
   describe('listAll', () => {
     it('Deve disparar um erro se productsService.list disparar um erro', () => {
       sinon.stub(productsService, 'list').rejects();
-      return chai.expect(productsService.list({}, {})).to.eventually.be.rejected;
+      return chai.expect(productsController.listAll({}, {})).to.eventually.be.rejected;
     });
 
     it('Deve chamar o status "200" e o res.json', async () => {
@@ -49,6 +49,36 @@ describe('controllers/productsController', () => {
       const res = makeRes();
       await productsController.get({}, res);
       return chai.expect(res.json.getCall(0).args[0]).to.deep.equal({ id: 1 });
+    });
+  });
+
+  describe('getByName', () => {
+    it('Deve disparar um erro se não for passado um valor na query "q" e productsController.listAll disparar um erro', () => {
+      sinon.stub(productsController, 'listAll').rejects();
+      return chai.expect(productsController.getByName({ query: 'a' }, {})).to.eventually.be.rejected;
+    });
+    it('Deve retornar undefined se não for passado um valor na query "q" e productsController.listAll retornar', () => {
+      sinon.stub(productsController, 'listAll').resolves();
+      return chai.expect(productsController.getByName({ query: '' }, {})).to.eventually.be.undefined;
+    });
+    it('Deve disparar um erro se productsService.ValidateQueryName disparar um erro', () => {
+      sinon.stub(productsController, 'listAll').resolves();
+      sinon.stub(productsService, 'ValidadeQueryName').rejects();
+      return chai.expect(productsController.getByName({ query: {q: 'a'} }, {})).to.eventually.be.rejected;
+    });
+    it('Deve disparar um erro se productsService.getByName disparar um erro', () => {
+      sinon.stub(productsController, 'listAll').resolves();
+      sinon.stub(productsService, 'ValidadeQueryName').resolves();
+      sinon.stub(productsService, 'getByName').rejects();
+      return chai.expect(productsController.getByName({ query: { q: 'a' } }, {})).to.eventually.be.rejected;
+    });
+    it('Deve chamar o res.status com 201 e o res.json', async () => {
+      sinon.stub(productsController, 'listAll').resolves();
+      sinon.stub(productsService, 'ValidadeQueryName').resolves();
+      sinon.stub(productsService, 'getByName').resolves([]);
+      const res = makeRes();
+      await productsController.getByName({ query: { q: 'a' } }, res);
+      return chai.expect(res.json.getCall(0).args[0]).to.deep.equal([])
     });
   });
 

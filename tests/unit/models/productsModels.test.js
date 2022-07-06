@@ -62,6 +62,19 @@ describe('models/productsModel', () => {
     });
   });
 
+  describe('getByName', () => {
+    it('Deve disparar um erro caso db.execute dispare um erro', () => {
+      sinon.stub(db, 'execute').rejects();
+      return chai.expect(productsModel.getByName()).to.eventually.be.rejected;
+    });
+
+    it('Deve retornar uma lista caso db.execute retorne', () => {
+      sinon.stub(db, 'execute').resolves([]);
+      return chai.expect(productsModel.getByName()).to
+        .eventually.be.undefined;
+    });
+  });
+
   describe('add', () => {
     it('Deve disparar um erro caso db.execute dispare um erro', () => {
       sinon.stub(db, 'execute').rejects();

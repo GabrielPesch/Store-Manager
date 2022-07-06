@@ -36,6 +36,19 @@ describe('services/productsService', () => {
     });
   });
 
+    describe('getByName', () => {
+    it('Deve disparar um erro caso productsModel.get dispare um erro', () => {
+      sinon.stub(productsModel, 'getByName').rejects();
+      return chai.expect(productsService.getByName('string'))
+        .to.eventually.be.rejected;
+    });
+
+    it('Deve retornar uma lista caso o db.execute retorne', () => {
+      sinon.stub(productsModel, 'getByName').resolves([]);
+      return chai.expect(productsService.getByName('string')).to.eventually.deep.equal([]);
+    });
+  });
+
   describe('add', () => {
     it('Deve disparar um erro caso productsModel.add dispare um erro', () => {
       sinon.stub(productsModel, 'add').rejects();
