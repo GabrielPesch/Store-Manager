@@ -8,8 +8,7 @@
     "npm": ">=7.0.0"
   },
   "scripts": {
-    "test": "jest --config ./jest.config.js --runInBand --detectOpenHandles",
-    "test:mocha": "nyc --all --include models --include services --include controllers mocha tests/unit/**/*.js --exit",
+    "test": "nyc --all --include models --include services --include controllers mocha tests/unit/**/*.js --exit",
     "start": "node index.js",
     "debug": "nodemon --ignore coverage index.js",
     "lint": "eslint --no-inline-config --no-error-on-unmatched-pattern -c .eslintrc.json . --ext .js, .jsx",
