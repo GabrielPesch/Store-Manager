@@ -12,8 +12,8 @@
     "start": "node index.js",
     "debug": "nodemon --ignore coverage index.js",
     "lint": "eslint --no-inline-config --no-error-on-unmatched-pattern -c .eslintrc.json . --ext .js, .jsx",
-    "migration": "node -e \"require('./__tests__/_utils').runMigration()\"",
-    "seed": "node -e \"require('./__tests__/_utils').runSeed()\""
+    "migration": "node -e \"require('./utils').runMigration()\"",
+    "seed": "node -e \"require('./utils').runSeed()\""
   },
   "repository": {
     "type": "git",
@@ -36,9 +36,11 @@
     "express-rescue": "^1.1.26",
     "joi": "^17.6.0",
     "mysql2": "^2.3.0",
-    "shelljs": "^0.8.5"
+    "shelljs": "^0.8.5",
+    "swagger-ui-express": "^4.4.0"
   },
   "devDependencies": {
+    "@types/swagger-ui-express": "^4.1.3",
     "chai": "^4.3.4",
     "eslint-config-trybe-backend": "^1.0.4",
     "frisby": "^2.1.2",
