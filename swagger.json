@@ -1,0 +1,487 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Store Manager",
+    "description": "Esta API é um sistema de gerenciamento de vendas no formato dropshipping",
+    "contact": {
+    "email": "gkpesch@gmail.com"
+    },
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3000",
+      "description": "Api de teste"
+    }
+  ],
+  "paths": {
+    "/products": {
+      "get": {
+        "summary": "Lista todos os produtos",
+        "description": "Esta rota é responsável por listar todos os produtos",
+        "tags": ["Products"],
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Product"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request: \"name\" is required"
+          },
+          "422": {
+            "description": "Unprocessable Entity: \"name\" length must be at least 5 characters long"
+          }
+        }
+      },
+      "post": {
+        "summary": "Cadastra um produto",
+        "description": "Esta rota é responsável por cadastrar um novo produto",
+        "tags": ["Products"],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Product"
+              },
+              "examples": {
+                "product": {
+                  "value": {
+                    "name": "ProdutoX"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "$ref": "#/components/schemas/Product"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request: \"name\" is required"
+          },
+          "422": {
+            "description": "Unprocessable Entity: \"name\" length must be at least 5 characters long"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/products/search": {
+      "get": {
+        "description": "Exemplo de url esperada: \"/products/search?q=Martelo\"",
+        "summary": "Busca um produto pelo nome",
+        "tags": ["Products"],
+        "parameters": [
+          {
+            "name": "name",
+            "in": "query",
+            "description": "Nome do produto a ser buscado"
+          }
+        ],
+        "responses":{
+          "200": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Product"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/products/{id}": {
+      "get": {
+        "description": "Busca um produto pelo id",
+        "summary": "Busca de um produto pelo id",
+        "tags": ["Products"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Nome do produto a ser buscado pelo id"
+          }
+        ],
+        "responses":{
+          "200": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "$ref": "#/components/schemas/Product"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found: Product not found"
+          }
+        }
+      },
+      "put": {
+        "description": "Altera um produto pelo id",
+        "summary": "Altera  um produto pelo id",
+        "tags": ["Products"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": "true",
+            "description": "Nome do produto a ser buscado pelo id"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Product"
+              },
+              "examples": {
+                "product": {
+                  "value": {
+                    "name": "ProdutoX"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses":{
+          "200": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "$ref": "#/components/schemas/Product"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found: \"Product not found\""
+          }
+        }
+      },
+      "delete": {
+        "description": "Deleta um produto pelo id",
+        "summary": "Deleta um produto pelo id",
+        "tags": ["Products"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": "true",
+            "description": "Nome do produto a ser deletado"
+          }
+        ],
+        "responses":{
+          "204": {
+            "description": "No content"
+          },
+          "404": {
+            "description": "Not Found: Product not found"
+          }
+        }
+      }
+    },
+    "/sales": {
+      "get": {
+          "summary": "Lista todas as vendas",
+          "description": "Esta rota é responsável por listar todas as vendas",
+          "tags": ["Sales"],
+          "responses": {
+            "200": {
+              "description": "Ok",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "$ref": "#/components/schemas/GetSale"
+                  }
+                }
+              }
+            },
+            "404": {
+              "description":  "Not Found: \"Sale not Found\""
+            }
+        }
+      },
+      "post": {
+        "summary": "Cadastra uma venda",
+        "description": "Esta rota é responsável por cadastrar uma nova venda",
+        "tags": ["Sales"],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Product"
+              },
+              "examples": {
+                "product": {
+                  "value": [
+                    {
+                      "productId": 1,
+                      "quantity":1
+                    },
+                    {
+                      "productId": 2,
+                      "quantity":5
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "$ref": "#/components/schemas/Sale"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request: \"productId\" || \"quantity\" is required"
+          },
+          "422": {
+            "description": "Unprocessable Entity: \"quantity\" must be greater than or equal to 1"
+          },
+          "404": {
+            "description": "Not Found: Product not found"
+          }
+        }
+      }
+    },
+    "/sales/{id}": {
+      "get": {
+        "description": "Busca uma venda pelo id",
+        "summary": "Busca uma venda pelo id",
+        "tags": ["Sales"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Venda a ser buscada pelo id"
+          }
+        ],
+        "responses":{
+          "200": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "$ref": "#/components/schemas/getSale"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found: Sale not found"
+          }
+        }
+      },
+      "put": {
+        "description": "Altera uma venda pelo id",
+        "summary": "Altera  uma venda pelo id",
+        "tags": ["Sales"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": "true",
+            "description": "Venda a ser buscada pelo id"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Product"
+              },
+              "examples": {
+                "product": {
+                  "value": [
+                    {
+                      "productId": 1,
+                      "quantity":1
+                    },
+                    {
+                      "productId": 2,
+                      "quantity":5
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "responses":{
+          "200": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "$ref": "#/components/schemas/EditSale"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found: Sale not dound"
+          }
+        }
+      },
+      "delete": {
+        "description": "Deleta uma venda id",
+        "summary": "Deleta uma  venda pelo id",
+        "tags": ["Sales"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": "true",
+            "description": "Venda a ser deletada"
+          }
+        ],
+        "responses":{
+          "204": {
+            "description": "No content"
+          },
+          "404": {
+            "description": "Not Found: Sale not found"
+          }
+        }
+      }
+    }
+  },
+  
+  
+  "components": {
+    "schemas": {
+      "Product": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number"
+          },
+          "name": {
+            "type": "string"
+          }
+        }
+      },
+      "GetSales": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "saleId": {
+              "type": "number"
+            },
+            "date": {
+              "type": "string"
+            },
+            "productId": {
+              "type": "number"
+            },
+            "quantity": {
+              "type": "number"
+            }
+          }
+        }
+      },
+      "GetSale": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "date": {
+              "type": "string"
+            },
+            "productId": {
+              "type": "number"
+            },
+            "quantity": {
+              "type": "number"
+            }
+          }
+        }
+      },
+      "Sale": {
+        "properties": {
+          "id": {
+            "type": "number"
+          },
+          "itemsSold": {
+            "type": "array",
+            "items":{
+              "type": "object",
+              "properties": {
+                "productId": {
+                  "type": "number"
+                },
+                "quantity": {
+                  "type": "number"
+                }
+              }
+            }
+          }
+        }
+      },
+      "EditSale": {
+        "properties": {
+          "saleId": {
+            "type": "number"
+          },
+          "itemsUpdated": {
+            "type": "array",
+            "items":{
+              "type": "object",
+              "properties": {
+                "productId": {
+                  "type": "number"
+                },
+                "quantity": {
+                  "type": "number"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
