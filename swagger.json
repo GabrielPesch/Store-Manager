@@ -33,12 +33,6 @@
                 }
               }
             }
-          },
-          "400": {
-            "description": "Bad request: \"name\" is required"
-          },
-          "422": {
-            "description": "Unprocessable Entity: \"name\" length must be at least 5 characters long"
           }
         }
       },
@@ -174,7 +168,7 @@
         },
         "responses":{
           "200": {
-            "description": "Created",
+            "description": "Ok",
             "content": {
               "application/json": {
                 "schema": {
@@ -279,7 +273,7 @@
             "description": "Unprocessable Entity: \"quantity\" must be greater than or equal to 1"
           },
           "404": {
-            "description": "Not Found: Product not found"
+            "description": "Not Found: Sale not found"
           }
         }
       }
@@ -303,7 +297,7 @@
               "application/json": {
                 "schema": {
                   "type": "object",
-                  "$ref": "#/components/schemas/getSale"
+                  "$ref": "#/components/schemas/GetSale"
                 }
               }
             }
