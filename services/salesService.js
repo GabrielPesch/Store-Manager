@@ -13,8 +13,7 @@ const salesService = {
 
   async add(data) {
     const saleId = await salesModel.addSale();
-    const dataMap = data.map((sale) => [saleId, sale.productId, sale.quantity]);
-    await salesModel.bulkAddBySale([dataMap]);
+    await salesModel.bulkAddBySale(data, saleId);
     return saleId;
   },
 

@@ -3,14 +3,14 @@ const salesService = require('../services/salesService');
 const salesController = {
   async listAll(_req, res) {
     const items = await salesService.list();
-    return res.status(200).json(items);
+    res.json(items);
   },
 
   async get(req, res) {
     const { id } = await salesService.validateParamsId(req.params);
     await salesService.checkExists(id);
     const sale = await salesService.get(id);
-    return res.status(200).json(sale);
+     res.json(sale);
   },
 
   async addSale(req, res) {
@@ -19,7 +19,7 @@ const salesController = {
     await salesService.checkIfArrayOfIdsExists(products);
     const id = await salesService.add(data);
     const message = { id, itemsSold: data };
-    return res.status(201).json(message);
+    res.status(201).json(message);
   }, 
 
   async remove(req, res) {
@@ -41,7 +41,7 @@ const salesController = {
     await salesService.edit(id, changes);
 
     const message = { saleId: id, itemsUpdated: changes };
-    return res.status(200).json(message);
+    res.json(message);
   },
 };
 
