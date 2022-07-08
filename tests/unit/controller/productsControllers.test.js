@@ -5,6 +5,7 @@ const productsService = require('../../../services/productsService');
 ;
 const productsController = require('../../../controllers/productsControllers');
 const { makeRes } = require('./utils');
+const { getByName } = require('../../../models/productsModel');
 
 chai.use(chaiAsPromised);
 
@@ -53,31 +54,24 @@ describe('controllers/productsController', () => {
   });
 
   describe('getByName', () => {
-    it('Deve disparar um erro se não for passado um valor na query "q" e productsController.listAll disparar um erro', () => {
-      sinon.stub(productsController, 'listAll').rejects();
-      return chai.expect(productsController.getByName({ query: 'a' }, {})).to.eventually.be.rejected;
-    });
-    it('Deve retornar undefined se não for passado um valor na query "q" e productsController.listAll retornar', () => {
-      sinon.stub(productsController, 'listAll').resolves();
-      return chai.expect(productsController.getByName({ query: '' }, {})).to.eventually.be.undefined;
-    });
-    it('Deve disparar um erro se productsService.ValidateQueryName disparar um erro', () => {
-      sinon.stub(productsController, 'listAll').resolves();
-      sinon.stub(productsService, 'ValidadeQueryName').rejects();
-      return chai.expect(productsController.getByName({ query: {q: 'a'} }, {})).to.eventually.be.rejected;
-    });
-    it('Deve disparar um erro se productsService.getByName disparar um erro', () => {
-      sinon.stub(productsController, 'listAll').resolves();
-      sinon.stub(productsService, 'ValidadeQueryName').resolves();
+    it('Deve disparar um erro se for passado um valor na query Q e productsService.getByName também disparar', () => {
       sinon.stub(productsService, 'getByName').rejects();
-      return chai.expect(productsController.getByName({ query: { q: 'a' } }, {})).to.eventually.be.rejected;
+      return chai.expect(productsController.getByName({query: {q: 'asd'}}, {})).to.eventually.be.rejected;
     });
-    it('Deve chamar o res.status com 201 e o res.json', async () => {
-      sinon.stub(productsController, 'listAll').resolves();
-      sinon.stub(productsService, 'ValidadeQueryName').resolves();
-      sinon.stub(productsService, 'getByName').resolves([]);
+    it('Deve disparar um erro se for passado um valor na query Q e productsService.list também disparar', () => {
+      sinon.stub(productsService, 'list').rejects();
+      return chai.expect(productsController.getByName({query: {q: ''}}, {})).to.eventually.be.rejected;
+    });
+    it('Deve chamar o res.status com 201 e o res.json se for passado um valor na query Q e productsService.getByName retornar', async () => {
+      sinon.stub(productsService, 'getByName').resolves();
       const res = makeRes();
       await productsController.getByName({ query: { q: 'a' } }, res);
+      return chai.expect(res.json.getCall(0).args[0]).to.deep.equal()
+    });
+    it('Deve chamar o res.status com 201 e o res.json se não for passado um valor na query Q e productsService.list retornar', async () => {
+      sinon.stub(productsService, 'list').resolves([]);
+      const res = makeRes();
+      await productsController.getByName({ query: { q: '' } }, res);
       return chai.expect(res.json.getCall(0).args[0]).to.deep.equal([])
     });
   });

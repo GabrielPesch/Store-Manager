@@ -14,14 +14,11 @@ const productsController = {
   },
 
   async getByName(req, res) {
-    const { q: queryByName } = req.query;
-    if (!queryByName) {
-        await productsController.listAll(req, res);
-        return;
-      }
-    await productsService.ValidadeQueryName(req.query);
-    const products = await productsService.getByName(queryByName);
-    return res.status(200).json(products);
+    const { q: queryByName } = req.query
+    const products = queryByName 
+      ? await productsService.getByName(queryByName)
+      : await productsService.list()
+    res.json(products)
   },
 
   async add(req, res) {
