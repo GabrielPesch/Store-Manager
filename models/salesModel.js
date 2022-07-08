@@ -25,12 +25,13 @@ const salesModel = {
     return insertId;
   },
 
-  async bulkAddBySale(data) {
+  async bulkAddBySale(data, saleId) {
+    const dataMap = data.map((sale) => [saleId, sale.productId, sale.quantity]);
     const sql = `
     INSERT INTO StoreManager.sales_products
     (sale_id, product_id, quantity)
     VALUES ?`;
-    const [{ affectedRows }] = await db.query(sql, data);
+    const [{ affectedRows }] = await db.query(sql, [dataMap]);
     return !!affectedRows;
   },
 

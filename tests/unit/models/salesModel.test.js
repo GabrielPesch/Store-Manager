@@ -58,22 +58,25 @@ describe('models/salesModel', () => {
   });
 
   describe('bulkAddBySale', () => {
+    it('Deve disparar um erro caso data não seja um array', () => {
+      return chai.expect(salesModel.bulkAddBySale('', 1)).to.eventually.be.rejected;
+    })
     it('Deve disparar um erro caso o MYSQL dispare um erro', () => {
       sinon.stub(db, 'query').rejects();
-      return chai.expect(salesModel.bulkAddBySale(1)).to.eventually.be.rejected;
+      return chai.expect(salesModel.bulkAddBySale([], 1)).to.eventually.be.rejected;
     });
     it('Deve disparar um erro caso o mysql não retorne um array', () => {
       sinon.stub(db, 'query').resolves([]);
-      return chai.expect(salesModel.bulkAddBySale(1)).to.eventually.be.rejected;
+      return chai.expect(salesModel.bulkAddBySale([], 1)).to.eventually.be.rejected;
     });
     it('deve retornar false se não encontrar o item', () => {
       sinon.stub(db, 'query').resolves([{}]);
-      return chai.expect(salesModel.bulkAddBySale(1)).to.eventually.be.false;
+      return chai.expect(salesModel.bulkAddBySale([], 1)).to.eventually.be.false;
     });
 
     it('deve retornar true se encontrar o item', () => {
       sinon.stub(db, 'query').resolves([{affectedRows: 1}]);
-      return chai.expect(salesModel.bulkAddBySale(1)).to.eventually.be.true;
+      return chai.expect(salesModel.bulkAddBySale([{ productId: 1, quantity: 2}], 1)).to.eventually.be.true;
     });
   });
 
